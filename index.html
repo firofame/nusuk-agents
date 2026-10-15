@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore India's Nusuk Masar qualified external agents. Search directory records, compare source classifications, and download the full dataset.">
+  <meta name="theme-color" content="#183e35">
+  <title>India | Nusuk Agent Directory</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #203d35;
+      --muted: #61716a;
+      --green: #215743;
+      --line: #dce3da;
+      --paper: #fafbf7;
+      --white: #fff;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.6 system-ui, sans-serif; }
+    a { color: var(--green); text-underline-offset: 3px; }
+    button, input, select { font: inherit; }
+    button, select { cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: .55; }
+    :focus-visible { outline: 3px solid #b37c21; outline-offset: 4px; }
+    [hidden] { display: none !important; }
+    .shell { width: min(1440px, calc(100% - 80px)); margin-inline: auto; }
+    .skip-link { position: absolute; top: -100px; left: 16px; z-index: 10; padding: 10px; background: var(--white); }
+    .skip-link:focus { top: 12px; }
+    .masthead { border-bottom: 1px solid var(--line); background: var(--white); }
+    .masthead-inner { min-height: 88px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: flex; align-items: center; gap: 13px; }
+    .brand-mark { width: 43px; height: 43px; display: grid; place-items: center; border-radius: 13px 13px 13px 3px; background: var(--ink); color: #eadbb3; }
+    .brand-mark svg { width: 25px; height: 25px; }
+    .brand-title { display: block; font-size: 17px; font-weight: 750; letter-spacing: -.4px; }
+    .brand-subtitle { display: block; color: var(--muted); font-size: 11px; letter-spacing: 1.8px; text-transform: uppercase; }
+    .source-link { font-size: 13px; font-weight: 650; }
+    .hero { padding: 56px 0 34px; }
+    .eyebrow { margin: 0 0 14px; color: var(--green); font-size: 11px; font-weight: 750; letter-spacing: 2px; text-transform: uppercase; }
+    .hero-grid { display: grid; grid-template-columns: 1fr auto; gap: 36px; align-items: end; }
+    h1 { margin: 0; max-width: 780px; font-family: Georgia, serif; font-size: clamp(36px, 4.4vw, 62px); font-weight: 400; line-height: 1.12; letter-spacing: -1.8px; }
+    h1 span { color: var(--green); }
+    .intro { max-width: 640px; margin: 20px 0 0; color: var(--muted); font-size: 16px; }
+    .snapshot { padding-bottom: 4px; text-align: right; font-size: 13px; color: var(--muted); }
+    .snapshot strong { display: block; color: var(--ink); font-weight: 650; }
+    .snapshot-dot { display: inline-block; width: 7px; height: 7px; margin-right: 7px; border-radius: 50%; background: var(--green); }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 36px; border: 1px solid var(--line); border-radius: 12px; background: var(--white); }
+    .stat { padding: 21px 28px; }
+    .stat + .stat { border-left: 1px solid var(--line); }
+    .stat-value { display: block; font-size: 32px; line-height: 1.25; font-weight: 600; letter-spacing: -1px; }
+    .stat-label { color: var(--muted); font-size: 12px; }
+    .notice { display: flex; align-items: start; gap: 12px; margin: 0 0 34px; padding: 16px 20px; border: 1px solid #e5dec9; border-radius: 8px; background: #f5f1e6; color: #685b3d; font-size: 12px; }
+    .notice svg { flex: 0 0 18px; width: 18px; height: 18px; margin-top: 2px; }
+    .notice p { margin: 0; }
+    .directory { padding-bottom: 48px; }
+    .section-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+    h2 { margin: 0; font-size: 22px; font-weight: 650; letter-spacing: -.6px; }
+    .section-heading p { margin: 3px 0 0; color: var(--muted); font-size: 13px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 9px 15px; border: 1px solid var(--line); border-radius: 6px; background: var(--white); color: var(--ink); font-size: 12px; font-weight: 650; text-decoration: none; }
+    .button:hover:not(:disabled) { background: #edf2eb; border-color: #a9bbad; }
+    .button-primary { border-color: var(--green); background: var(--green); color: var(--white); }
+    .button-primary:hover:not(:disabled) { background: #163d2e; border-color: #163d2e; }
+    .button svg { width: 15px; height: 15px; }
+    .filters { display: grid; grid-template-columns: minmax(220px, 2fr) minmax(150px, 1fr) minmax(170px, 1fr) minmax(145px, .9fr); gap: 14px; padding: 20px; border: 1px solid var(--line); border-radius: 10px; background: var(--white); }
+    .field { min-width: 0; }
+    .field label { display: block; margin-bottom: 7px; font-size: 11px; font-weight: 700; }
+    input, select { width: 100%; min-width: 0; height: 43px; padding: 0 12px; border: 1px solid var(--line); border-radius: 5px; background: var(--paper); color: var(--ink); font-size: 12px; }
+    input::placeholder { color: #78847d; }
+    .search-field { position: relative; }
+    .search-field svg { position: absolute; top: 13px; left: 12px; width: 17px; height: 17px; color: var(--muted); pointer-events: none; }
+    .search-field input { padding-left: 37px; }
+    .results-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; min-height: 64px; font-size: 12px; }
+    #visible-count { margin: 0; color: var(--muted); }
+    .text-button { padding: 3px 0; border: 0; background: none; color: var(--green); font-size: 12px; font-weight: 650; text-decoration: underline; text-underline-offset: 3px; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 9px; background: var(--white); }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
+    caption { text-align: left; }
+    th { padding: 14px 18px; background: #eef2eb; color: #5f7165; font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; white-space: nowrap; }
+    td { padding: 20px 18px; vertical-align: top; border-top: 1px solid #e8ece5; }
+    tbody tr:hover { background: #fbfcf8; }
+    .agency-cell { min-width: 255px; width: 29%; }
+    .agency-name { margin: 0 0 5px; font-size: 12px; font-weight: 750; line-height: 1.5; }
+    .arabic-name { display: block; color: var(--muted); font-size: 13px; line-height: 1.7; text-align: start; }
+    .agent-code { display: inline-block; margin-top: 7px; font: 10px/1.6 ui-monospace, monospace; color: var(--muted); }
+    .city-cell { min-width: 140px; }
+    .city-arabic { display: block; margin-top: 4px; color: var(--muted); }
+    .contact-cell { min-width: 215px; max-width: 290px; overflow-wrap: anywhere; }
+    .contact-cell a { display: block; width: fit-content; margin-top: 5px; font-size: 11px; }
+    .address-cell { min-width: 200px; max-width: 290px; color: var(--muted); font-size: 11px; overflow-wrap: anywhere; white-space: pre-wrap; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px; border: 1px solid #e2e7e0; border-radius: 5px; background: #f1f3ef; color: #58665d; font-size: 10px; font-weight: 650; white-space: nowrap; }
+    .badge::before { content: ""; width: 5px; height: 5px; flex-shrink: 0; border-radius: 50%; background: currentColor; }
+    .badge[data-range="Green range"] { background: #edf5ec; border-color: #d6e6d3; color: #31623e; }
+    .badge[data-range="Yellow range"] { background: #fbf6df; border-color: #eee4ba; color: #796014; }
+    .badge[data-range="Orange range"] { background: #fff0e5; border-color: #f2decc; color: #9b541e; }
+    .badge[data-range="Red range"] { background: #fbeeed; border-color: #eed7d5; color: #a24540; }
+    .contact-warning { margin-top: 9px; color: #8b571f; font-size: 10px; }
+    .contact-warning summary { cursor: pointer; }
+    .contact-warning p { margin: 5px 0 0; }
+    .state { margin: 0; padding: 54px 20px; border: 1px solid var(--line); border-radius: 9px; text-align: center; background: var(--white); }
+    .state h3 { margin: 0 0 6px; font-size: 18px; }
+    .state p { margin: 0 0 16px; color: var(--muted); font-size: 13px; }
+    #load-error { border-color: #e2c4bd; }
+    #load-error code { display: inline-block; padding: 4px 8px; border-radius: 4px; background: #f2f3ed; overflow-wrap: anywhere; }
+    .table-note { margin: 13px 0 0; color: var(--muted); font-size: 11px; }
+    .about { padding: 26px 0; border-top: 1px solid var(--line); }
+    .about summary { width: fit-content; cursor: pointer; font-size: 13px; font-weight: 650; }
+    .about-content { max-width: 850px; padding-top: 14px; color: var(--muted); font-size: 12px; }
+    .about-content p { margin: 0 0 10px; }
+    footer { padding: 24px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    .footer-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+    @media (min-width: 1600px) { .hero { padding-top: 64px; } }
+    @media (max-width: 1000px) {
+      .shell { width: calc(100% - 48px); }
+      .hero-grid { grid-template-columns: 1fr; gap: 20px; }
+      .snapshot { text-align: left; }
+      .snapshot strong { display: inline; margin-left: 8px; }
+      .filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 600px) {
+      .shell { width: calc(100% - 32px); }
+      .masthead-inner { min-height: 76px; gap: 12px; }
+      .brand-title { font-size: 14px; }
+      .brand-subtitle { font-size: 9px; letter-spacing: 1.2px; }
+      .brand-mark { width: 36px; height: 36px; }
+      .source-link { max-width: 95px; font-size: 11px; text-align: right; }
+      .hero { padding-top: 32px; }
+      h1 { font-size: 39px; letter-spacing: -1.3px; }
+      .intro { font-size: 14px; }
+      .stats { margin-top: 24px; }
+      .stat { padding: 16px 10px; }
+      .stat-value { font-size: 26px; }
+      .stat-label { font-size: 10px; }
+      .notice { padding: 14px; margin-bottom: 28px; }
+      .filters { padding: 14px; gap: 12px; }
+      .field:first-child { grid-column: 1 / -1; }
+      .field:last-child { grid-column: 1 / -1; }
+      .actions { width: 100%; }
+      .actions .button { flex: 1; padding-inline: 10px; }
+      .table-wrap { border-radius: 6px; }
+      .table-note { font-size: 10px; }
+    }
+    @media print {
+      body { background: #fff; color: #000; font-size: 10px; }
+      .shell { width: 100%; }
+      .masthead, .actions, .filters, .text-button, footer, .skip-link { display: none !important; }
+      .hero { padding: 0 0 15px; }
+      .hero-grid { display: block; }
+      h1 { font-size: 28px; }
+      .intro { font-size: 11px; margin-top: 10px; }
+      .snapshot { margin-top: 10px; text-align: left; }
+      .stats { margin-top: 15px; }
+      .stat { padding: 8px 15px; }
+      .stat-value { font-size: 20px; }
+      .notice { margin-bottom: 15px; padding: 8px; font-size: 9px; }
+      .section-heading { margin-bottom: 0; }
+      .table-wrap { overflow: visible; border-radius: 0; }
+      table { font-size: 8px; table-layout: fixed; }
+      th, td { padding: 6px; min-width: 0 !important; overflow-wrap: anywhere; }
+      th { font-size: 7px; white-space: normal; }
+      .agency-cell { width: 27%; }
+      .contact-cell { width: 21%; }
+      .address-cell { width: 23%; font-size: 8px; }
+      .agency-name, .contact-cell a { font-size: 8px; }
+      .arabic-name, .city-arabic { font-size: 9px; }
+      .badge { font-size: 7px; padding: 2px 3px; white-space: normal; }
+      .agent-code, .contact-warning { font-size: 7px; }
+      thead { display: table-header-group; }
+      tr { break-inside: avoid; }
+      .about { padding: 12px 0; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#directory">Skip to agent directory</a>
+  <header class="masthead">
+    <div class="shell masthead-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 27V13l11-8 11 8v14M10 27V16l6-5 6 5v11M3 27h26M16 2v3"/></svg>
+        </span>
+        <div><span class="brand-title">Nusuk Agent Directory</span><span class="brand-subtitle">India edition · Independent resource</span></div>
+      </div>
+      <a class="source-link" id="source-link" href="https://masar.nusuk.sa/landing/services/details/2" target="_blank" rel="noopener noreferrer">Official Nusuk directory ↗</a>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero" aria-labelledby="page-title">
+      <p class="eyebrow">The directory / <span id="country-label">India</span></p>
+      <div class="hero-grid">
+        <div>
+          <h1 id="page-title">Find your next<br><span>Umrah travel partner.</span></h1>
+          <p class="intro">Explore <span id="intro-country">India</span>'s qualified external agents listed in Nusuk Masar. Find agency details, directory classifications, and contacts in one place.</p>
+        </div>
+        <div class="snapshot"><span class="snapshot-dot" aria-hidden="true"></span>Directory snapshot<strong><time id="snapshot-date">Loading date…</time></strong></div>
+      </div>
+      <div class="stats" aria-label="Dataset overview">
+        <div class="stat"><span class="stat-value" id="agency-total">—</span><span class="stat-label">Listed agencies</span></div>
+        <div class="stat"><span class="stat-value" id="city-total">—</span><span class="stat-label">Directory city labels</span></div>
+        <div class="stat"><span class="stat-value" id="range-total">—</span><span class="stat-label">Source classifications</span></div>
+      </div>
+    </section>
+
+    <aside class="notice" aria-label="Important directory information">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v2"/></svg>
+      <p><strong>A directory, not an endorsement.</strong> This is a saved public-directory snapshot, not a live licence check. Range labels do not establish current licence status, direct Nusuk B2B access, or service quality. Confirm an agency's credentials and contact details before booking.</p>
+    </aside>
+
+    <section class="directory" id="directory" aria-labelledby="directory-title" aria-busy="true">
+      <div class="section-heading">
+        <div><h2 id="directory-title">Explore the directory</h2><p>Source names and contact details, preserved as listed.</p></div>
+        <div class="actions">
+          <a class="button" href="./data.json" download>Download JSON</a>
+          <button class="button" id="print" type="button" disabled>Print directory</button>
+          <button class="button button-primary" id="download-csv" type="button" disabled>
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M10 2v10m-4-4 4 4 4-4M3 13v4h14v-4"/></svg>
+            Download full CSV
+          </button>
+        </div>
+      </div>
+      <form class="filters" id="filters" role="search" aria-label="Filter agents">
+        <div class="field">
+          <label for="search">Search agencies</label>
+          <div class="search-field">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg>
+            <input id="search" type="search" placeholder="Name, code, address, phone, email…" autocomplete="off" disabled>
+          </div>
+        </div>
+        <div class="field"><label for="city">Directory city</label><select id="city" disabled><option value="">All cities</option></select></div>
+        <div class="field"><label for="range">Range classification</label><select id="range" disabled><option value="">All classifications</option></select></div>
+        <div class="field"><label for="sort">Sort by</label><select id="sort" disabled><option value="source">Directory order</option><option value="name">Agency name: A–Z</option><option value="city">Directory city: A–Z</option></select></div>
+      </form>
+      <div class="results-toolbar">
+        <p id="visible-count" role="status" aria-live="polite">Loading directory from data.json…</p>
+        <button class="text-button" id="clear-filters" type="button" hidden>Reset filters</button>
+      </div>
+      <noscript><p class="state">JavaScript is needed to search this directory. You can still <a href="./data.json" download>download the complete JSON dataset</a>.</p></noscript>
+      <div class="state" id="load-error" role="alert" hidden>
+        <h3>We couldn't load the directory</h3>
+        <p id="error-message"></p>
+        <p>Keep <code>index.html</code> and <code>data.json</code> together and serve this folder over HTTP.<br>For example, run <code>python3 -m http.server 8000 --bind 127.0.0.1</code> and open <code>http://127.0.0.1:8000</code>.</p>
+        <button class="button" id="retry" type="button">Try again</button>
+      </div>
+      <div class="state" id="empty-state" hidden>
+        <h3>No agencies match your search</h3>
+        <p>Try a different name, code, city, or classification.</p>
+        <button class="button" id="reset-empty" type="button">Reset filters</button>
+      </div>
+      <div class="table-wrap" id="table-wrap" role="region" aria-label="Agent records, scroll horizontally for all columns" tabindex="0" hidden>
+        <table>
+          <caption class="sr-only" id="table-caption">Qualified external agents listed in the public Nusuk Masar directory</caption>
+          <thead><tr><th scope="col">Agency / code</th><th scope="col">Directory city</th><th scope="col">Contact details</th><th scope="col">Address as listed</th><th scope="col">Range</th></tr></thead>
+          <tbody id="agents"></tbody>
+        </table>
+      </div>
+      <p class="table-note" id="table-note" hidden>English and Arabic names are provided by the source. City labels may be legacy directory groupings, not office towns or state boundaries. Scroll the table horizontally on smaller screens. Printing includes the current filtered results; downloads include every record.</p>
+    </section>
+
+    <details class="about">
+      <summary>About this data &amp; its limitations</summary>
+      <div class="about-content">
+        <p id="data-scope">The dataset covers the records returned by the official public directory, not every travel business in India.</p>
+        <p id="fetch-summary"></p>
+        <p>Source spelling, spacing, legacy city labels, addresses, phone numbers, and email addresses are retained. Contacts have not been called or emailed. Unusual phone formats are flagged with the dataset's original warning, not corrected; an unusual format may be an international number.</p>
+        <p>CSV exports include English and Arabic names, source identifiers, classifications, and contact warnings. The JSON download includes the original records, pagination metadata, counts, and scope. Spreadsheet formula-like text is prefixed with an apostrophe in CSV exports for safe opening.</p>
+        <p>This independent resource is not affiliated with Nusuk or a booking service. Always consult the <a id="about-source" href="https://masar.nusuk.sa/landing/services/details/2" target="_blank" rel="noopener noreferrer">official Nusuk Masar directory</a> for current information.</p>
+      </div>
+    </details>
+  </main>
+
+  <footer><div class="shell footer-inner"><span>Travel with clarity. Verify before you book.</span><span>Public source data · Independent directory</span></div></footer>
+
+  <script>
+    'use strict';
+
+    const byId = id => document.getElementById(id);
+    const searchInput = byId('search');
+    const citySelect = byId('city');
+    const rangeSelect = byId('range');
+    const sortSelect = byId('sort');
+    const directory = byId('directory');
+    const countOutput = byId('visible-count');
+    const tableBody = byId('agents');
+    const collator = new Intl.Collator('en', { sensitivity: 'base', numeric: true });
+    const numberFormat = new Intl.NumberFormat('en-IN');
+    const controls = [searchInput, citySelect, rangeSelect, sortSelect, byId('download-csv'), byId('print')];
+    let dataset;
+    let entries = [];
+
+    function textElement(tag, text, className) {
+      const element = document.createElement(tag);
+      element.textContent = text;
+      if (className) element.className = className;
+      return element;
+    }
+
+    function validateData(data) {
+      if (!data || !Array.isArray(data.records) || !data.records.length) {
+        throw new Error('The dataset must contain a non-empty records array.');
+      }
+      if (typeof data.country !== 'string' || !data.country.trim() ||
+          typeof data.scope !== 'string' || !data.scope.trim() ||
+          typeof data.source !== 'string' || !/^https?:\/\//i.test(data.source) ||
+          typeof data.completedAt !== 'string' || !Number.isFinite(Date.parse(data.completedAt)) ||
+          !Array.isArray(data.pages) || !Number.isInteger(data.totalReported) ||
+          !Number.isInteger(data.pageSize) || !data.contactWarnings ||
+          typeof data.contactWarnings !== 'object' || Array.isArray(data.contactWarnings) ||
+          Object.values(data.contactWarnings).some(value => typeof value !== 'string')) {
+        throw new Error('The dataset has missing or invalid source metadata.');
+      }
+      const ids = new Set();
+      const codes = new Set();
+      for (const [index, record] of data.records.entries()) {
+        const fields = ['nameEn', 'nameAr', 'cityNameEn', 'cityNameAr', 'mobileNo', 'email', 'address'];
+        if (!record || fields.some(key => typeof record[key] !== 'string') ||
+            !Number.isInteger(record.id) || !Number.isInteger(record.code) ||
+            !Number.isInteger(record.cid) || !Number.isInteger(record.countryId) ||
+            !record.classificationInfo || typeof record.classificationInfo.nameEn !== 'string' ||
+            typeof record.classificationInfo.nameAr !== 'string') {
+          throw new Error(`Record ${index + 1} has missing or invalid agency fields.`);
+        }
+        if (ids.has(record.id) || codes.has(record.code)) {
+          throw new Error(`Record ${index + 1} has a duplicate identifier or displayed code.`);
+        }
+        ids.add(record.id);
+        codes.add(record.code);
+      }
+      if (data.recordsFetched !== data.records.length || data.totalReported !== data.records.length ||
+          data.uniqueInternalIds !== ids.size || data.uniqueDisplayedCodes !== codes.size) {
+        throw new Error('The record totals do not match the dataset metadata.');
+      }
+    }
+
+    function addOptions(select, counts, allLabel) {
+      select.replaceChildren(new Option(allLabel, ''));
+      for (const [label, count] of [...counts].sort((a, b) => collator.compare(a[0], b[0]))) {
+        select.add(new Option(`${label} (${numberFormat.format(count)})`, label));
+      }
+    }
+
+    function makeRow(record) {
+      const row = document.createElement('tr');
+      row.dataset.agentCode = record.code;
+      row.dataset.city = record.cityNameEn;
+      row.dataset.range = record.classificationInfo.nameEn;
+
+      const agency = textElement('td', '', 'agency-cell');
+      const name = textElement('p', record.nameEn, 'agency-name');
+      name.dir = 'auto';
+      const arabic = textElement('span', record.nameAr, 'arabic-name');
+      arabic.lang = 'ar';
+      arabic.dir = 'rtl';
+      agency.append(name, arabic, textElement('span', `Code ${record.code}`, 'agent-code'));
+
+      const city = textElement('td', '', 'city-cell');
+      const cityName = textElement('span', record.cityNameEn);
+      cityName.dir = 'auto';
+      const arabicCity = textElement('span', record.cityNameAr, 'city-arabic');
+      arabicCity.lang = 'ar';
+      arabicCity.dir = 'rtl';
+      city.append(cityName, arabicCity);
+
+      const contact = textElement('td', '', 'contact-cell');
+      const phone = textElement('span', record.mobileNo);
+      phone.dir = 'ltr';
+      const email = textElement('a', record.email);
+      email.dir = 'ltr';
+      email.href = `mailto:${encodeURIComponent(record.email)}`;
+      contact.append(phone, email);
+      const warning = dataset.contactWarnings[record.code];
+      if (warning) {
+        const details = textElement('details', '', 'contact-warning');
+        details.append(textElement('summary', 'Check phone format'), textElement('p', warning));
+        contact.append(details);
+      }
+
+      const address = textElement('td', record.address, 'address-cell');
+      address.dir = 'auto';
+      const range = document.createElement('td');
+      const badge = textElement('span', record.classificationInfo.nameEn, 'badge');
+      badge.dataset.range = record.classificationInfo.nameEn;
+      badge.title = record.classificationInfo.nameAr;
+      range.append(badge);
+      row.append(agency, city, contact, address, range);
+      return row;
+    }
+
+    function filterRows() {
+      const query = searchInput.value.trim().toLocaleLowerCase();
+      const filtered = entries.filter(entry =>
+        (!query || entry.text.includes(query)) &&
+        (!citySelect.value || entry.record.cityNameEn === citySelect.value) &&
+        (!rangeSelect.value || entry.record.classificationInfo.nameEn === rangeSelect.value)
+      );
+      if (sortSelect.value !== 'source') {
+        const key = sortSelect.value === 'city' ? 'cityNameEn' : 'nameEn';
+        filtered.sort((a, b) => collator.compare(a.record[key], b.record[key]) || a.index - b.index);
+      }
+      tableBody.replaceChildren(...filtered.map(entry => entry.row));
+      countOutput.textContent = `Showing ${numberFormat.format(filtered.length)} of ${numberFormat.format(entries.length)} agencies`;
+      byId('table-wrap').hidden = filtered.length === 0;
+      byId('empty-state').hidden = filtered.length !== 0;
+      byId('clear-filters').hidden = !query && !citySelect.value && !rangeSelect.value && sortSelect.value === 'source';
+    }
+
+    function resetFilters() {
+      byId('filters').reset();
+      filterRows();
+    }
+
+    function showDataset(data) {
+      dataset = data;
+      const cities = new Map();
+      const ranges = new Map();
+      entries = data.records.map((record, index) => {
+        cities.set(record.cityNameEn, (cities.get(record.cityNameEn) || 0) + 1);
+        ranges.set(record.classificationInfo.nameEn, (ranges.get(record.classificationInfo.nameEn) || 0) + 1);
+        return {
+          record, index, row: makeRow(record),
+          text: [record.nameEn, record.nameAr, record.code, record.cityNameEn, record.cityNameAr,
+            record.mobileNo, record.email, record.address, record.classificationInfo.nameEn,
+            record.classificationInfo.nameAr, data.contactWarnings[record.code] || ''].join(' ').toLocaleLowerCase()
+        };
+      });
+      addOptions(citySelect, cities, 'All cities');
+      addOptions(rangeSelect, ranges, 'All classifications');
+      byId('country-label').textContent = data.country;
+      byId('intro-country').textContent = data.country;
+      byId('agency-total').textContent = numberFormat.format(entries.length);
+      byId('city-total').textContent = numberFormat.format(cities.size);
+      byId('range-total').textContent = numberFormat.format(ranges.size);
+      const date = new Date(data.completedAt);
+      const formattedDate = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(date);
+      byId('snapshot-date').textContent = formattedDate;
+      byId('snapshot-date').dateTime = data.completedAt;
+      document.title = `${data.country} Nusuk Agent Directory | ${formattedDate}`;
+      byId('source-link').href = data.source;
+      byId('about-source').href = data.source;
+      byId('table-caption').textContent = `${data.country}: qualified external agents listed in the public Nusuk Masar directory`;
+      byId('data-scope').textContent = data.scope;
+      byId('fetch-summary').textContent = `Fetched ${formattedDate}: ${numberFormat.format(data.records.length)} records across ${data.pages.length} source pages, at up to ${data.pageSize} records per page. The source reported ${numberFormat.format(data.totalReported)} records. All ${data.uniqueInternalIds} internal IDs and ${data.uniqueDisplayedCodes} displayed codes are distinct.`;
+      byId('table-note').hidden = false;
+      byId('filters').reset();
+      filterRows();
+    }
+
+    async function loadDirectory() {
+      directory.setAttribute('aria-busy', 'true');
+      controls.forEach(control => { control.disabled = true; });
+      byId('retry').disabled = true;
+      byId('load-error').hidden = true;
+      countOutput.textContent = 'Loading directory from data.json…';
+      try {
+        const response = await fetch('./data.json');
+        if (!response.ok) throw new Error(`The data request returned HTTP ${response.status}.`);
+        const data = await response.json();
+        validateData(data);
+        showDataset(data);
+        controls.forEach(control => { control.disabled = false; });
+      } catch (error) {
+        console.error('Unable to load the Nusuk agent directory:', error);
+        countOutput.textContent = 'Directory unavailable.';
+        byId('error-message').textContent = error instanceof Error ? error.message : 'An unexpected error prevented loading.';
+        byId('load-error').hidden = false;
+      } finally {
+        directory.setAttribute('aria-busy', 'false');
+        byId('retry').disabled = false;
+      }
+    }
+
+    function csvCell(value) {
+      let text = String(value ?? '');
+      // Prevent source text from being interpreted as a spreadsheet formula.
+      if (/^\s*[=+\-@]/.test(text) || /^[\t\r\n]/.test(text)) text = `'${text}`;
+      return `"${text.replace(/"/g, '""')}"`;
+    }
+
+    function downloadCsv() {
+      const rows = [['Internal ID', 'Displayed code', 'Agency name (English)', 'Agency name (Arabic)',
+        'Directory city (English)', 'Directory city (Arabic)', 'Phone as listed', 'Email', 'Address as listed',
+        'Range (English)', 'Range (Arabic)', 'Contact warning', 'City ID', 'Country ID']];
+      for (const record of dataset.records) {
+        rows.push([record.id, record.code, record.nameEn, record.nameAr, record.cityNameEn, record.cityNameAr,
+          record.mobileNo, record.email, record.address, record.classificationInfo.nameEn,
+          record.classificationInfo.nameAr, dataset.contactWarnings[record.code] || '', record.cid, record.countryId]);
+      }
+      const csv = '\uFEFF' + rows.map(row => row.map(csvCell).join(',')).join('\r\n');
+      const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `nusuk-${dataset.country.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-agencies-${new Date(dataset.completedAt).toISOString().slice(0, 10)}.csv`;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    byId('filters').addEventListener('submit', event => event.preventDefault());
+    searchInput.addEventListener('input', filterRows);
+    citySelect.addEventListener('change', filterRows);
+    rangeSelect.addEventListener('change', filterRows);
+    sortSelect.addEventListener('change', filterRows);
+    byId('clear-filters').addEventListener('click', resetFilters);
+    byId('reset-empty').addEventListener('click', () => { resetFilters(); searchInput.focus(); });
+    byId('download-csv').addEventListener('click', downloadCsv);
+    byId('print').addEventListener('click', () => window.print());
+    byId('retry').addEventListener('click', loadDirectory);
+    const expandedForPrint = new Set();
+    window.addEventListener('beforeprint', () => {
+      document.querySelectorAll('.contact-warning:not([open])').forEach(details => {
+        expandedForPrint.add(details);
+        details.open = true;
+      });
+    });
+    window.addEventListener('afterprint', () => {
+      expandedForPrint.forEach(details => { details.open = false; });
+      expandedForPrint.clear();
+    });
+    loadDirectory();
+  </script>
+</body>
+</html>
