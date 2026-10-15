@@ -62,7 +62,7 @@
     .button-primary { border-color: var(--green); background: var(--green); color: var(--white); }
     .button-primary:hover:not(:disabled) { background: #163d2e; border-color: #163d2e; }
     .button svg { width: 15px; height: 15px; }
-    .filters { display: grid; grid-template-columns: minmax(220px, 2fr) minmax(150px, 1fr) minmax(170px, 1fr) minmax(145px, .9fr); gap: 14px; padding: 20px; border: 1px solid var(--line); border-radius: 10px; background: var(--white); }
+    .filters { display: grid; grid-template-columns: minmax(220px, 2fr) repeat(2, minmax(130px, 1fr)) minmax(170px, 1fr) minmax(145px, .9fr); gap: 14px; padding: 20px; border: 1px solid var(--line); border-radius: 10px; background: var(--white); }
     .field { min-width: 0; }
     .field label { display: block; margin-bottom: 7px; font-size: 11px; font-weight: 700; }
     input, select { width: 100%; min-width: 0; height: 43px; padding: 0 12px; border: 1px solid var(--line); border-radius: 5px; background: var(--paper); color: var(--ink); font-size: 12px; }
@@ -228,6 +228,7 @@
             <input id="search" type="search" placeholder="Name, code, address, phone, email…" autocomplete="off" disabled>
           </div>
         </div>
+        <div class="field"><label for="state">State / union territory</label><select id="state" disabled><option value="">All states / UTs</option></select></div>
         <div class="field"><label for="city">Directory city</label><select id="city" disabled><option value="">All cities</option></select></div>
         <div class="field"><label for="range">Range classification</label><select id="range" disabled><option value="">All classifications</option></select></div>
         <div class="field"><label for="sort">Sort by</label><select id="sort" disabled><option value="source">Directory order</option><option value="name">Agency name: A–Z</option><option value="city">Directory city: A–Z</option></select></div>
@@ -245,7 +246,7 @@
       </div>
       <div class="state" id="empty-state" hidden>
         <h3>No agencies match your search</h3>
-        <p>Try a different name, code, city, or classification.</p>
+        <p>Try a different name, code, state, city, or classification.</p>
         <button class="button" id="reset-empty" type="button">Reset filters</button>
       </div>
       <div class="table-wrap" id="table-wrap" role="region" aria-label="Agent records, scroll horizontally for all columns" tabindex="0" hidden>
@@ -255,7 +256,7 @@
           <tbody id="agents"></tbody>
         </table>
       </div>
-      <p class="table-note" id="table-note" hidden>English and Arabic names are provided by the source. City labels may be legacy directory groupings, not office towns or state boundaries. Scroll the table horizontally on smaller screens. Printing includes the current filtered results; downloads include every record.</p>
+      <p class="table-note" id="table-note" hidden>Click an agency's English or Arabic name to search Google for its name and directory city in a new tab. Names are provided by the source. City labels may be legacy directory groupings, not office towns or state boundaries. Scroll the table horizontally on smaller screens. Printing includes the current filtered results; downloads include every record.</p>
     </section>
 
     <details class="about">
@@ -264,7 +265,8 @@
         <p id="data-scope">The dataset covers the records returned by the official public directory, not every travel business in India.</p>
         <p id="fetch-summary"></p>
         <p>Source spelling, spacing, legacy city labels, addresses, phone numbers, and email addresses are retained. Contacts have not been called or emailed. Unusual phone formats are flagged with the dataset's original warning, not corrected; an unusual format may be an international number.</p>
-        <p>CSV exports include English and Arabic names, source identifiers, classifications, and contact warnings. The JSON download includes the original records, pagination metadata, counts, and scope. Spreadsheet formula-like text is prefixed with an apostrophe in CSV exports for safe opening.</p>
+        <p>The state / union territory filter uses the dataset's state labels, not a verified office location. It can be combined with search, directory city, and classification filters.</p>
+        <p>CSV exports include English and Arabic names, source identifiers, state labels, classifications, and contact warnings. The JSON download includes the original records, pagination metadata, counts, and scope. Spreadsheet formula-like text is prefixed with an apostrophe in CSV exports for safe opening.</p>
         <p>This independent resource is not affiliated with Nusuk or a booking service. Always consult the <a id="about-source" href="https://masar.nusuk.sa/landing/services/details/2" target="_blank" rel="noopener noreferrer">official Nusuk Masar directory</a> for current information.</p>
       </div>
     </details>
@@ -277,6 +279,7 @@
 
     const byId = id => document.getElementById(id);
     const searchInput = byId('search');
+    const stateSelect = byId('state');
     const citySelect = byId('city');
     const rangeSelect = byId('range');
     const sortSelect = byId('sort');
@@ -285,7 +288,7 @@
     const tableBody = byId('agents');
     const collator = new Intl.Collator('en', { sensitivity: 'base', numeric: true });
     const numberFormat = new Intl.NumberFormat('en-IN');
-    const controls = [searchInput, citySelect, rangeSelect, sortSelect, byId('download-csv'), byId('print')];
+    const controls = [searchInput, stateSelect, citySelect, rangeSelect, sortSelect, byId('download-csv'), byId('print')];
     let dataset;
     let entries = [];
 
@@ -313,8 +316,9 @@
       const ids = new Set();
       const codes = new Set();
       for (const [index, record] of data.records.entries()) {
-        const fields = ['nameEn', 'nameAr', 'cityNameEn', 'cityNameAr', 'mobileNo', 'email', 'address'];
+        const fields = ['nameEn', 'nameAr', 'cityNameEn', 'cityNameAr', 'state', 'mobileNo', 'email', 'address'];
         if (!record || fields.some(key => typeof record[key] !== 'string') ||
+            !record.state.trim() ||
             !Number.isInteger(record.id) || !Number.isInteger(record.code) ||
             !Number.isInteger(record.cid) || !Number.isInteger(record.countryId) ||
             !record.classificationInfo || typeof record.classificationInfo.nameEn !== 'string' ||
@@ -347,9 +351,19 @@
       row.dataset.range = record.classificationInfo.nameEn;
 
       const agency = textElement('td', '', 'agency-cell');
-      const name = textElement('p', record.nameEn, 'agency-name');
+      const name = textElement('p', '', 'agency-name');
       name.dir = 'auto';
-      const arabic = textElement('span', record.nameAr, 'arabic-name');
+      const english = textElement('a', record.nameEn);
+      const arabic = textElement('a', record.nameAr, 'arabic-name');
+      const searchQuery = `${record.nameEn.trim()} ${record.cityNameEn.trim()}`;
+      const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
+      for (const link of [english, arabic]) {
+        link.href = searchUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.title = 'Search Google (opens in a new tab)';
+      }
+      name.append(english);
       arabic.lang = 'ar';
       arabic.dir = 'rtl';
       agency.append(name, arabic, textElement('span', `Code ${record.code}`, 'agent-code'));
@@ -391,6 +405,7 @@
       const query = searchInput.value.trim().toLocaleLowerCase();
       const filtered = entries.filter(entry =>
         (!query || entry.text.includes(query)) &&
+        (!stateSelect.value || entry.record.state === stateSelect.value) &&
         (!citySelect.value || entry.record.cityNameEn === citySelect.value) &&
         (!rangeSelect.value || entry.record.classificationInfo.nameEn === rangeSelect.value)
       );
@@ -402,7 +417,7 @@
       countOutput.textContent = `Showing ${numberFormat.format(filtered.length)} of ${numberFormat.format(entries.length)} agencies`;
       byId('table-wrap').hidden = filtered.length === 0;
       byId('empty-state').hidden = filtered.length !== 0;
-      byId('clear-filters').hidden = !query && !citySelect.value && !rangeSelect.value && sortSelect.value === 'source';
+      byId('clear-filters').hidden = !query && !stateSelect.value && !citySelect.value && !rangeSelect.value && sortSelect.value === 'source';
     }
 
     function resetFilters() {
@@ -412,18 +427,21 @@
 
     function showDataset(data) {
       dataset = data;
+      const states = new Map();
       const cities = new Map();
       const ranges = new Map();
       entries = data.records.map((record, index) => {
+        states.set(record.state, (states.get(record.state) || 0) + 1);
         cities.set(record.cityNameEn, (cities.get(record.cityNameEn) || 0) + 1);
         ranges.set(record.classificationInfo.nameEn, (ranges.get(record.classificationInfo.nameEn) || 0) + 1);
         return {
           record, index, row: makeRow(record),
-          text: [record.nameEn, record.nameAr, record.code, record.cityNameEn, record.cityNameAr,
+          text: [record.nameEn, record.nameAr, record.code, record.state, record.cityNameEn, record.cityNameAr,
             record.mobileNo, record.email, record.address, record.classificationInfo.nameEn,
             record.classificationInfo.nameAr, data.contactWarnings[record.code] || ''].join(' ').toLocaleLowerCase()
         };
       });
+      addOptions(stateSelect, states, 'All states / UTs');
       addOptions(citySelect, cities, 'All cities');
       addOptions(rangeSelect, ranges, 'All classifications');
       byId('country-label').textContent = data.country;
@@ -480,11 +498,11 @@
     function downloadCsv() {
       const rows = [['Internal ID', 'Displayed code', 'Agency name (English)', 'Agency name (Arabic)',
         'Directory city (English)', 'Directory city (Arabic)', 'Phone as listed', 'Email', 'Address as listed',
-        'Range (English)', 'Range (Arabic)', 'Contact warning', 'City ID', 'Country ID']];
+        'Range (English)', 'Range (Arabic)', 'Contact warning', 'City ID', 'Country ID', 'State / union territory']];
       for (const record of dataset.records) {
         rows.push([record.id, record.code, record.nameEn, record.nameAr, record.cityNameEn, record.cityNameAr,
           record.mobileNo, record.email, record.address, record.classificationInfo.nameEn,
-          record.classificationInfo.nameAr, dataset.contactWarnings[record.code] || '', record.cid, record.countryId]);
+          record.classificationInfo.nameAr, dataset.contactWarnings[record.code] || '', record.cid, record.countryId, record.state]);
       }
       const csv = '\uFEFF' + rows.map(row => row.map(csvCell).join(',')).join('\r\n');
       const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
@@ -499,6 +517,7 @@
 
     byId('filters').addEventListener('submit', event => event.preventDefault());
     searchInput.addEventListener('input', filterRows);
+    stateSelect.addEventListener('change', filterRows);
     citySelect.addEventListener('change', filterRows);
     rangeSelect.addEventListener('change', filterRows);
     sortSelect.addEventListener('change', filterRows);
